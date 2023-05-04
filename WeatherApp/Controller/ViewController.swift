@@ -173,7 +173,6 @@ extension ViewController: UITextFieldDelegate {
         }
         
         func didFailWithError(error: Error) {
-            WeatherManagerError.failToGetUrl
             errorAlert(title: "City Not Found", message: "Please, try again" , vc: self)
             print(error)
         }

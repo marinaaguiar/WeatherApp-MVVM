@@ -12,8 +12,6 @@ struct WeatherModel {
         case clearSky, fewClouds, thunderstorm, drizzle, rain, snow, fog, clouds
     }
 
-    var weatherManager = WeatherManager()
-    
     let cityName: String
     let countryName: String
     let currentTemperature: Double
@@ -36,7 +34,6 @@ struct WeatherModel {
         return currentTimeAmPm
     }
 
-    
     var condition: Condition {
         switch conditionId {
         case 200...232:
