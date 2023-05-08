@@ -22,28 +22,17 @@ struct WeatherModelAdapter {
     let conditionId: Int
     let conditionDescription: String
 
-    init(
-        cityName: String,
-        countryName: String,
-        currentTemperature: Double,
-        currentTimeInMilliseconds: Int,
-        timeZoneInMilliseconds: Int,
-        sunriseInMilliseconds: Int,
-        sunsetInMilliseconds: Int,
-        conditionId: Int,
-        conditionDescription: String
-    ) {
-        self.cityName = cityName
-        self.countryName = countryName
-        self.currentTemperature = currentTemperature
-        self.currentTimeInMilliseconds = currentTimeInMilliseconds
-        self.timeZoneInMilliseconds = timeZoneInMilliseconds
-        self.sunriseInMilliseconds = sunriseInMilliseconds
-        self.sunsetInMilliseconds = sunsetInMilliseconds
-        self.conditionId = conditionId
-        self.conditionDescription = conditionDescription
+    init(data: WeatherData) {
+        self.cityName = data.name
+        self.countryName = data.sys.country
+        self.currentTemperature = data.main.temp
+        self.currentTimeInMilliseconds = data.dt
+        self.timeZoneInMilliseconds = data.timezone
+        self.sunriseInMilliseconds = data.sys.sunrise
+        self.sunsetInMilliseconds = data.sys.sunset
+        self.conditionId = data.weather[0].id
+        self.conditionDescription = data.weather[0].description
     }
-
 
     func getConvertedData() -> WeatherModel? {
 
@@ -97,7 +86,6 @@ struct WeatherModelAdapter {
         }
     }
 
-
     private func convert(from timeInMilliseconds: Int, timeZoneInMilliseconds: Int) -> String? {
 
         guard let timeZone = TimeZone(secondsFromGMT: timeZoneInMilliseconds) else {
@@ -109,7 +97,6 @@ struct WeatherModelAdapter {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone
         dateFormatter.dateFormat = "HH:mm"
-
 
         return dateFormatter.string(from: date)
     }
@@ -128,6 +115,5 @@ struct WeatherModelAdapter {
 
         return dateString
     }
-
 }
 

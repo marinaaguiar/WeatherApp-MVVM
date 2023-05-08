@@ -155,7 +155,7 @@ extension ViewController: UITextFieldDelegate {
                 self.timeLabel.text = weather.currentTimeAmPm
                 self.dataTextLabel.text = weather.currentDate
                 self.conditionDescription.text = weather.conditionDescription
-                self.conditionImageView.image = UIImage(named: "\(weather.condition)")
+                self.conditionImageView.image = UIImage(named: "\(weather.condition).day")
                 self.conditionImageView.isHidden = false
                 self.view.backgroundColor = weather.backgroundColor
                 self.promptTextLabel.text = weather.promptTextMessage
@@ -203,19 +203,3 @@ extension ViewController: CLLocationManagerDelegate {
     }
     
 }
-    
-//    //MARK: - Error Alert
-//
-//class Alert {
-//
-//    class func errorAlert(title: String, message: String, vc: UIViewController) {
-//
-//        let alert = UIAlertController(title: "OK", message: message, preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-//
-//    }
-//
-//}
-//
-//
-

@@ -14,7 +14,6 @@ struct WeatherData: Codable {
     let dt: Int
     let sys: LocationData
     let timezone: Int
-
 }
 
 struct Main: Codable {

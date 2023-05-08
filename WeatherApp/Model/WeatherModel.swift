@@ -28,7 +28,7 @@ struct WeatherModel {
     }
     
     var currentTimeAmPm: String? {
-        guard let currentTimeAmPm = converToAmPm(from: currentTime) else {
+        guard let currentTimeAmPm = convertToAmPmFormat(from: currentTime) else {
             return nil
         }
         return currentTimeAmPm
@@ -91,8 +91,6 @@ struct WeatherModel {
         }
     }
     
-    
-    
     var promptTextMessage: String {
         switch condition {
         case .thunderstorm:
@@ -117,7 +115,7 @@ struct WeatherModel {
     }
     
     
-    // Converter os dados em miliseconds para o formato de hora padrão
+    // Convert data from milliseconds to hour format
     
     private func convert(from timeInMilliseconds: Int, timeZoneInMilliseconds: Int) -> String? {
         guard let timeZone = TimeZone(secondsFromGMT: timeZoneInMilliseconds) else {
@@ -134,7 +132,7 @@ struct WeatherModel {
         return dateFormatter.string(from: date)
     }
     
-    private func converToAmPm(from currentTime: String?) -> String? {
+    private func convertToAmPmFormat(from currentTime: String?) -> String? {
         let inFormatter = DateFormatter()
         inFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX") as Locale
         inFormatter.dateFormat = "HH:mm"
@@ -152,9 +150,5 @@ struct WeatherModel {
         
         return outFormatter.string(from: date) // -> outputs 04:50
     }
-    
-    
-
-    
 }
 

@@ -30,17 +30,7 @@ struct WeatherManager {
             case .success(let data):
                 print(data)
 
-                let weatherModel = WeatherModelAdapter(
-                    cityName: data.name,
-                    countryName: data.sys.country,
-                    currentTemperature: data.main.temp,
-                    currentTimeInMilliseconds: data.dt,
-                    timeZoneInMilliseconds: data.timezone,
-                    sunriseInMilliseconds: data.sys.sunrise,
-                    sunsetInMilliseconds: data.sys.sunset,
-                    conditionId: data.weather[0].id,
-                    conditionDescription: data.weather[0].description
-                    )
+                let weatherModel = WeatherModelAdapter(data: data)
 
                 guard let convertedWeatherModel = weatherModel.getConvertedData() else { return }
 
@@ -59,23 +49,13 @@ struct WeatherManager {
             case .success(let data):
                 print(data)
 
-                let weatherModel = WeatherModelAdapter(
-                    cityName: data.name,
-                    countryName: data.sys.country,
-                    currentTemperature: data.main.temp,
-                    currentTimeInMilliseconds: data.dt,
-                    timeZoneInMilliseconds: data.timezone,
-                    sunriseInMilliseconds: data.sys.sunrise,
-                    sunsetInMilliseconds: data.sys.sunset,
-                    conditionId: data.weather[0].id,
-                    conditionDescription: data.weather[0].description
-                    )
+                let weatherModel = WeatherModelAdapter(data: data)
 
                 guard let convertedWeatherModel = weatherModel.getConvertedData() else { return }
 
                 delegate?.didUpdateWeather(self, weather: convertedWeatherModel)
 
-            case .failure(let error):
+            case .failure(_):
                 delegate?.didFailWithError(error: WeatherManagerError.failToGetUrl)
             }
         }
