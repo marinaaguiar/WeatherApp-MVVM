@@ -12,78 +12,57 @@ struct WeatherModelAdapter {
         case clearSky, fewClouds, thunderstorm, drizzle, rain, snow, fog, clouds
     }
 
-    let cityName: String
-    let countryName: String
-    let currentTemperature: Double
-    let currentTimeInMilliseconds: Int
-    let timeZoneInMilliseconds: Int
-    let sunriseInMilliseconds: Int
-    let sunsetInMilliseconds: Int
-    let conditionId: Int
-    let conditionDescription: String
+    let data: WeatherData!
 
     init(data: WeatherData) {
-        self.cityName = data.name
-        self.countryName = data.sys.country
-        self.currentTemperature = data.main.temp
-        self.currentTimeInMilliseconds = data.dt
-        self.timeZoneInMilliseconds = data.timezone
-        self.sunriseInMilliseconds = data.sys.sunrise
-        self.sunsetInMilliseconds = data.sys.sunset
-        self.conditionId = data.weather[0].id
-        self.conditionDescription = data.weather[0].description
+        self.data = data
     }
 
     func getConvertedData() -> WeatherModel? {
 
         guard let currentTime: String = convert(
-            from: currentTimeInMilliseconds,
-            timeZoneInMilliseconds: timeZoneInMilliseconds)
+            from: data.currentTime,
+            timeZoneInMilliseconds: data.timezone)
         else { return nil }
 
         guard let sunriseTime: String = convert(
-            from: sunriseInMilliseconds,
-            timeZoneInMilliseconds: timeZoneInMilliseconds)
+            from: data.locationData.sunrise,
+            timeZoneInMilliseconds: data.timezone)
         else { return nil }
 
         guard let sunsetTime: String = convert(
-            from: sunsetInMilliseconds,
-            timeZoneInMilliseconds: timeZoneInMilliseconds)
+            from: data.locationData.sunset,
+            timeZoneInMilliseconds: data.timezone)
         else { return nil }
 
         guard let currentDate: String = convertToCurrentDate(
-            from: currentTimeInMilliseconds,
-            timeZoneInMilliseconds: timeZoneInMilliseconds)
+            from: data.currentTime,
+            timeZoneInMilliseconds: data.timezone)
         else { return nil }
 
-        let isDay = isDay(
-            current: currentTime,
-            sunrise: sunriseTime,
-            sunset: sunsetTime)
-
         let weatherModel = WeatherModel(
-            cityName: cityName,
-            countryName: countryName,
-            currentTemperature: currentTemperature,
+            cityName: data.cityName,
+            countryName: data.locationData.country,
+            currentTemperature: data.main.temperature,
             currentTime: currentTime,
             sunriseTime: sunriseTime,
             sunsetTime: sunsetTime,
             currentDate: currentDate,
-            conditionId: conditionId,
-            conditionDescription: conditionDescription,
-            isDay: isDay)
+            conditionId: data.weather[0].id,
+            conditionDescription: data.weather[0].description,
+            isDay: isCurrentTimeDaytime(
+                current: currentTime,
+                sunrise: sunriseTime,
+                sunset: sunsetTime)
+        )
 
         return weatherModel
     }
 
-    private func isDay(current: String, sunrise: String, sunset: String) -> Bool {
+    private func isCurrentTimeDaytime(current: String, sunrise: String, sunset: String) -> Bool {
         let range = sunrise...sunset
 
-        if range.contains(current) {
-            return true
-        } else {
-            return false
-        }
+        return range.contains(current)
     }
 
     private func convert(from timeInMilliseconds: Int, timeZoneInMilliseconds: Int) -> String? {
