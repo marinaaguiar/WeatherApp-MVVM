@@ -8,16 +8,32 @@
 import Foundation
 
 struct WeatherData: Codable {
-    let name: String
+    let cityName: String
     let main: Main
     let weather: [Weather]
-    let dt: Int
-    let sys: LocationData
+    let currentTime: Int
+    let locationData: LocationData
     let timezone: Int
+
+    init(
+        cityName: String,
+        main: Main,
+        weather: [Weather],
+        currentTime: Int,
+        locationData: LocationData,
+        timezone: Int
+    ) {
+        self.cityName = cityName
+        self.main = main
+        self.weather = weather
+        self.currentTime = currentTime
+        self.locationData = locationData
+        self.timezone = timezone
+    }
 }
 
 struct Main: Codable {
-    let temp: Double
+    let temperature: Double
 }
 
 struct Weather: Codable {
@@ -25,9 +41,23 @@ struct Weather: Codable {
     let id: Int
 }
 
-
 struct LocationData: Codable {
     let sunrise: Int
     let sunset: Int
     let country: String
+}
+
+private extension WeatherData {
+    enum CodingKeys: String, CodingKey {
+        case cityName = "name"
+        case currentTime = "dt"
+        case locationData = "sys"
+        case main, weather, timezone
+    }
+}
+
+private extension Main {
+    enum CodingKeys: String, CodingKey {
+        case temperature = "temp"
+    }
 }
