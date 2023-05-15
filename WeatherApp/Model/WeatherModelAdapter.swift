@@ -51,17 +51,16 @@ struct WeatherModelAdapter {
             conditionId: data.weather[0].id,
             conditionDescription: data.weather[0].description,
             isDay: isCurrentTimeDaytime(
-                current: currentTime,
-                sunrise: sunriseTime,
-                sunset: sunsetTime)
+                current: data.currentTime,
+                sunrise: data.locationData.sunrise,
+                sunset: data.locationData.sunset)
         )
 
         return weatherModel
     }
 
-    private func isCurrentTimeDaytime(current: String, sunrise: String, sunset: String) -> Bool {
+    private func isCurrentTimeDaytime(current: Int, sunrise: Int, sunset: Int) -> Bool {
         let range = sunrise...sunset
-
         return range.contains(current)
     }
 
