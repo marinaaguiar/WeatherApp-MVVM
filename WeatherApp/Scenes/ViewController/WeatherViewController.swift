@@ -103,10 +103,10 @@ class WeatherViewController: UIViewController {
 
 extension WeatherViewController {
 
-    func errorAlert(title: String, message: String, vc: UIViewController) {
+    func presentAlert(title: String, message: String, vc: UIViewController) {
 
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 
         present(alert, animated: true, completion: nil)
     }
@@ -130,7 +130,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        errorAlert(title: "Not able to fetch your location", message: "Check your internet connection", vc: self)
+        presentAlert(title: "Not able to fetch your location", message: "Check your internet connection", vc: self)
     }
 }
 
@@ -200,10 +200,10 @@ extension WeatherViewController: WeatherViewModelDelegate {
                 self.stopLoading()
                 self.updateLabels(with: weatherModel)
             case .error(let error as APIError):
-                self.errorAlert(title: error.title, message: error.message, vc: self)
+                self.presentAlert(title: error.title, message: error.message, vc: self)
                 self.stopLoading()
             case .error(_):
-                self.errorAlert(title: "Unexpected Error", message: "", vc: self)
+                self.presentAlert(title: "Unexpected Error", message: "", vc: self)
             }
         }
     }
