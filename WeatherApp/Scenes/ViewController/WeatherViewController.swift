@@ -101,10 +101,15 @@ class WeatherViewController: UIViewController {
 
 //MARK: - Alerts
 
-func errorAlert(title: String, message: String, vc: UIViewController) {
+extension WeatherViewController {
 
-    let alert = UIAlertController(title: "OK", message: message, preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    func errorAlert(title: String, message: String, vc: UIViewController) {
+
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 //MARK: - CLLocationManagerDelegate
@@ -194,8 +199,11 @@ extension WeatherViewController: WeatherViewModelDelegate {
             case .success(let weatherModel):
                 self.stopLoading()
                 self.updateLabels(with: weatherModel)
-            case .error(let error):
-                errorAlert(title: "City Not Found", message: "Please, try again" , vc: self)
+            case .error(let error as APIError):
+                self.errorAlert(title: error.title, message: error.message, vc: self)
+                self.stopLoading()
+            case .error(_):
+                self.errorAlert(title: "Unexpected Error", message: "", vc: self)
             }
         }
     }

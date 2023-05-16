@@ -69,10 +69,6 @@ private struct EndPoint {
 
 class APIService {
 
-    enum NetworkingError: Error {
-        case failedToGetData
-    }
-
     enum APIError: Error {
         case failedToConstructURL
         case failedToEncoding
