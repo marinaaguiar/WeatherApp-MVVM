@@ -35,6 +35,22 @@ final class WeatherModelAdapterTests: XCTestCase {
 
         XCTAssertFalse(weatherModel!.isDay)
     }
+
+    func testCurrentDateConversion() {
+        weatherData = WeatherData.mock()
+        weatherModelAdapter = WeatherModelAdapter(data: weatherData)
+        let weatherModel = weatherModelAdapter.getConvertedData()
+
+        XCTAssertEqual(weatherModel?.currentDate, "Tuesday, May 16")
+    }
+
+    func testCurrentTimeConversion() {
+        weatherData = WeatherData.mock()
+        weatherModelAdapter = WeatherModelAdapter(data: weatherData)
+        let weatherModel = weatherModelAdapter.getConvertedData()
+
+        XCTAssertEqual(weatherModel?.currentTime, "14:25")
+    }
 }
 
 extension WeatherData {
@@ -43,7 +59,7 @@ extension WeatherData {
         case daytime, night
     }
 
-    static func mock(for daytime: DayInterval) -> WeatherData {
+    static func mock(for daytime: DayInterval = .daytime) -> WeatherData {
         var weatherData: WeatherData!
 
         switch daytime {
@@ -52,10 +68,10 @@ extension WeatherData {
                 cityName: "Porto",
                 main: Main(temperature: 292.7),
                 weather: [Weather(description: "clear sky", id: 800)],
-                currentTime: 1683652515,
+                currentTime: 1684243544,
                 locationData: LocationData(
-                    sunrise: 1683609779,
-                    sunset: 1683661130,
+                    sunrise: 1684217700,
+                    sunset: 1684269960,
                     country: "PT"),
                 timezone: 3600)
         case .night:
@@ -63,10 +79,10 @@ extension WeatherData {
                 cityName: "Porto",
                 main: Main(temperature: 292.7),
                 weather: [Weather(description: "clear sky", id: 800)],
-                currentTime: 1683654710,
+                currentTime: 1684271700,
                 locationData: LocationData(
-                    sunrise: 1683664560,
-                    sunset: 1683702434,
+                    sunrise: 1684217700,
+                    sunset: 1684269960,
                     country: "PT"),
                 timezone: 3600)
         }
