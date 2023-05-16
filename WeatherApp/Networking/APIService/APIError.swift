@@ -17,9 +17,9 @@ enum APIError: Error {
     var message: String {
         switch self {
         case .unknown, .failedRequest, .invalidResponse:
-            return " Please try again later or contact our support team for further assistance."
+            return "Please try again later or contact our support team for further assistance."
         case .noInternetConnection:
-            return "Please check your internet connection and try again."
+            return "Please check your internet connection, make sure your device is connected over Wi-Fi or cellular data and try again."
         }
     }
     var title: String {
