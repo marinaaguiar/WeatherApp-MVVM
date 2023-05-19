@@ -20,12 +20,12 @@ final class WeatherModelAdapterTests: XCTestCase {
         super.tearDown()
     }
 
-    func testIsDaytime() {
+    func testIsDaytime() throws {
         weatherData = WeatherData.mock(for: .daytime)
         weatherModelAdapter = WeatherModelAdapter(data: weatherData)
-        let weatherModel = weatherModelAdapter.getConvertedData()
+        let weatherModel = try XCTUnwrap(weatherModelAdapter.getConvertedData())
 
-        XCTAssertTrue(weatherModel!.isDay)
+        XCTAssertTrue(weatherModel.isDay)
     }
 
     func testIsNight() {
@@ -89,3 +89,4 @@ extension WeatherData {
         return weatherData
     }
 }
+
