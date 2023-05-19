@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum WeatherApp {
+struct WeatherAppDS {
 
     enum Colors {
         static let backgroundColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00)

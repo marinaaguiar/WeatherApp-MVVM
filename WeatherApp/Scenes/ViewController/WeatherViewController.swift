@@ -29,7 +29,7 @@ class WeatherViewController: UIViewController {
         hideFields()
         startLoading()
 
-        view.backgroundColor = WeatherApp.Colors.backgroundColor
+        view.backgroundColor = WeatherAppDS.Colors.backgroundColor
         self.viewModel.delegate = self
 
         setupLocationManager()
@@ -99,21 +99,21 @@ class WeatherViewController: UIViewController {
         var backgroundColor: UIColor {
                 switch condition {
                 case .thunderstorm:
-                    return WeatherApp.Colors.thunderstormBackground
+                    return WeatherAppDS.Colors.thunderstormBackground
                 case .drizzle:
-                    return WeatherApp.Colors.drizzleBackground
+                    return WeatherAppDS.Colors.drizzleBackground
                 case .snow:
-                    return WeatherApp.Colors.snowBackground
+                    return WeatherAppDS.Colors.snowBackground
                 case .fog:
-                    return WeatherApp.Colors.fogBackground
+                    return WeatherAppDS.Colors.fogBackground
                 case .clearSky, .fewClouds, .rain:
                     if viewModel.isDay() {
-                        return WeatherApp.Colors.clearDayBackground
+                        return WeatherAppDS.Colors.clearDayBackground
                     } else {
-                        return WeatherApp.Colors.clearNightBackground
+                        return WeatherAppDS.Colors.clearNightBackground
                     }
                 case .clouds:
-                    return WeatherApp.Colors.cloudBackground
+                    return WeatherAppDS.Colors.cloudBackground
             }
         }
 
