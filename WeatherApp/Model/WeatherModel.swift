@@ -7,10 +7,11 @@
 
 import UIKit
 
+enum Condition {
+    case clearSky, fewClouds, thunderstorm, drizzle, rain, snow, fog, clouds
+}
+
 struct WeatherModel {
-    enum Condition {
-        case clearSky, fewClouds, thunderstorm, drizzle, rain, snow, fog, clouds
-    }
 
     let cityName: String
     let countryName: String
@@ -56,65 +57,7 @@ struct WeatherModel {
             return .clouds
         }
     }
-    
-    var backgroundColor: UIColor {
-            switch condition {
-            case .thunderstorm:
-                return WeatherApp.Colors.thunderstormBackground
-            case .drizzle:
-                return WeatherApp.Colors.drizzleBackground
-            case .snow:
-                return WeatherApp.Colors.snowBackground
-            case .fog:
-                return WeatherApp.Colors.fogBackground
-            case .clearSky, .fewClouds, .rain:
-                if isDay {
-                    return WeatherApp.Colors.clearDayBackground
-                } else {
-                    return WeatherApp.Colors.clearNightBackground
-                }
-            case .clouds:
-                return WeatherApp.Colors.cloudBackground
-        }
-    }
-    
-    var darkOrLightMode: UIUserInterfaceStyle {
-        switch condition {
-        case .thunderstorm, .snow, .drizzle, .fog, .clouds:
-            return .light
-        case .clearSky, .fewClouds, .rain:
-            if isDay {
-                return .light
-            } else {
-                return .dark
-            }
-        }
-    }
-    
-    var promptTextMessage: String {
-        switch condition {
-        case .thunderstorm:
-            return "stay safe!"
-        case .drizzle:
-            return "it's just a drizzle!"
-        case .rain:
-            return "you better have an umbrella!"
-        case .snow:
-            return "don't forget your coat!"
-        case .fog:
-            return "don't worry this fog will pass!"
-        case .clearSky:
-            if isDay {
-                return "have a bright day!"
-            } else {
-                return "nighty night!"
-            }
-        case .fewClouds, .clouds:
-            return "don't worry this cloud will pass!"
-        }
-    }
-    
-    
+            
     // Convert data from milliseconds to hour format
     
     private func convert(from timeInMilliseconds: Int, timeZoneInMilliseconds: Int) -> String? {

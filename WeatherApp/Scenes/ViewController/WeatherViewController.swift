@@ -84,18 +84,85 @@ class WeatherViewController: UIViewController {
         view.isUserInteractionEnabled = true
     }
 
-    func updateLabels(with weather: WeatherModel) {
-        temperatureLabel.text = weather.temperature
-        locationTextLabel.text = "\(weather.cityName), \(weather.countryName)"
-        timeLabel.text = weather.currentTimeAmPm
-        dataTextLabel.text = weather.currentDate
-        conditionDescription.text = weather.conditionDescription
-        conditionImageView.image = UIImage(named: "\(weather.condition).day")
-        print("\(weather.condition).day")
+    func updateLabels() {
+        temperatureLabel.text = viewModel.getTemperature()
+        locationTextLabel.text = viewModel.getLocationLabel()
+        timeLabel.text = viewModel.getCurrentTimeAmPmFormat()
+        dataTextLabel.text = viewModel.getCurrentDate()
+        conditionDescription.text = viewModel.getConditionDescription()
+        conditionImageView.image = UIImage(named: viewModel.getWeatherConditionImageName())
         conditionImageView.isHidden = false
-        view.backgroundColor = weather.backgroundColor
-        promptTextLabel.text = weather.promptTextMessage
-        overrideUserInterfaceStyle = weather.darkOrLightMode
+    }
+
+    func updateBackgroundColor(for condition: Condition) {
+
+        var backgroundColor: UIColor {
+                switch condition {
+                case .thunderstorm:
+                    return WeatherApp.Colors.thunderstormBackground
+                case .drizzle:
+                    return WeatherApp.Colors.drizzleBackground
+                case .snow:
+                    return WeatherApp.Colors.snowBackground
+                case .fog:
+                    return WeatherApp.Colors.fogBackground
+                case .clearSky, .fewClouds, .rain:
+                    if viewModel.isDay() {
+                        return WeatherApp.Colors.clearDayBackground
+                    } else {
+                        return WeatherApp.Colors.clearNightBackground
+                    }
+                case .clouds:
+                    return WeatherApp.Colors.cloudBackground
+            }
+        }
+
+        view.backgroundColor = backgroundColor
+    }
+
+    func updatePromptTextMessage(for condition: Condition) {
+
+        var promptTextMessage: String {
+            switch condition {
+            case .thunderstorm:
+                return "stay safe!"
+            case .drizzle:
+                return "it's just a drizzle!"
+            case .rain:
+                return "you better have an umbrella!"
+            case .snow:
+                return "don't forget your coat!"
+            case .fog:
+                return "don't worry this fog will pass!"
+            case .clearSky:
+                if viewModel.isDay() {
+                    return "have a bright day!"
+                } else {
+                    return "nighty night!"
+                }
+            case .fewClouds, .clouds:
+                return "don't worry this cloud will pass!"
+            }
+        }
+
+        promptTextLabel.text = promptTextMessage
+    }
+
+    func updateDarkOrLightMode(for condition: Condition) {
+
+        var darkOrLightMode: UIUserInterfaceStyle {
+            switch condition {
+            case .thunderstorm, .snow, .drizzle, .fog, .clouds:
+                return .light
+            case .clearSky, .fewClouds, .rain:
+                if viewModel.isDay() {
+                    return .light
+                } else {
+                    return .dark
+                }
+            }
+        }
+        overrideUserInterfaceStyle = darkOrLightMode
     }
 }
 
@@ -196,9 +263,13 @@ extension WeatherViewController: WeatherViewModelDelegate {
                 break
             case .loading:
                 self.startLoading()
-            case .success(let weatherModel):
+            case .success(_):
+                let weatherCondition = self.viewModel.getWeatherCondition()
                 self.stopLoading()
-                self.updateLabels(with: weatherModel)
+                self.updateLabels()
+                self.updateBackgroundColor(for: weatherCondition)
+                self.updatePromptTextMessage(for: weatherCondition)
+                self.updateDarkOrLightMode(for: weatherCondition)
             case .error(let error as APIError):
                 self.presentAlert(title: error.title, message: error.message, vc: self)
                 self.stopLoading()

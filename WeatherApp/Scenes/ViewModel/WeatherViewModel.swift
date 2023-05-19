@@ -18,8 +18,10 @@ enum ViewState {
 final class WeatherViewModel: WeatherViewModelProtocol {
 
     weak var delegate: WeatherViewModelDelegate?
+    private var weatherModel: WeatherModel!
 
     let apiService = APIService()
+
     private var state: ViewState {
         didSet {
             self.delegate?.didUpdate(with: state)
@@ -43,7 +45,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
 
                     guard let convertedWeatherModel = weatherModel.getConvertedData() else { return }
                     self.state = .success(convertedWeatherModel)
-
+                    self.weatherModel = convertedWeatherModel
                 case .failure(let error):
                     self.state = .error(error)
                 }
@@ -66,10 +68,53 @@ final class WeatherViewModel: WeatherViewModelProtocol {
                     guard let convertedWeatherModel = weatherModel.getConvertedData() else { return }
 
                     self.state = .success(convertedWeatherModel)
+                    self.weatherModel = convertedWeatherModel
 
                 case .failure(let error):
                     self.state = .error(error)
                 }
             }
         }
+
+    func getTemperature() -> String {
+        return weatherModel?.temperature ?? ""
+    }
+
+    func getLocationLabel() -> String {
+        guard
+            let cityName = weatherModel?.cityName,
+            let countryName = weatherModel?.countryName
+        else { return "" }
+        return "\(cityName), \(countryName)"
+    }
+
+    func getCurrentTimeAmPmFormat() -> String {
+        return weatherModel?.currentTimeAmPm ?? ""
+    }
+
+    func getCurrentDate() -> String {
+        return weatherModel?.currentDate ?? ""
+    }
+
+    func getConditionDescription() -> String {
+        return weatherModel?.conditionDescription ?? ""
+    }
+
+    func getWeatherConditionImageName() -> String {
+
+        if weatherModel.isDay {
+            return "\(weatherModel.condition)" + ".day"
+        } else {
+            return "\(weatherModel.condition)" + ".night"
+        }
+    }
+
+    func getWeatherCondition() -> Condition {
+        return weatherModel?.condition ?? .clearSky
+    }
+
+    func isDay() -> Bool {
+        return weatherModel?.isDay ?? true
+    }
+
 }
