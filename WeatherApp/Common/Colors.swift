@@ -9,7 +9,7 @@ import UIKit
 
 struct WeatherAppDS {
 
-    enum Colors {
+    enum Colors: CaseIterable {
         static let backgroundColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00)
         static let thunderstormBackground = UIColor(red: 0.59, green: 0.58, blue: 0.58, alpha: 1.00)
         static let drizzleBackground = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00)

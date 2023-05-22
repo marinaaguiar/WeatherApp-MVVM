@@ -84,20 +84,20 @@ class WeatherViewController: UIViewController {
         view.isUserInteractionEnabled = true
     }
 
-    func updateLabels() {
-        temperatureLabel.text = viewModel.getTemperature()
-        locationTextLabel.text = viewModel.getLocationLabel()
-        timeLabel.text = viewModel.getCurrentTimeAmPmFormat()
-        dataTextLabel.text = viewModel.getCurrentDate()
-        conditionDescription.text = viewModel.getConditionDescription()
-        conditionImageView.image = UIImage(named: viewModel.getWeatherConditionImageName())
+    func updateLabels(for item: WeatherViewItem) {
+        temperatureLabel.text = item.temperature
+        locationTextLabel.text = item.location
+        timeLabel.text = item.timeAmPmFormat
+        dataTextLabel.text = item.currentDate
+        conditionDescription.text = item.conditionDescription
+        conditionImageView.image = UIImage(named: item.conditionImageName)
         conditionImageView.isHidden = false
     }
 
-    func updateBackgroundColor(for condition: Condition) {
+    func updateBackgroundColor(for item: WeatherViewItem) {
 
         var backgroundColor: UIColor {
-                switch condition {
+            switch item.weatherCondition {
                 case .thunderstorm:
                     return WeatherAppDS.Colors.thunderstormBackground
                 case .drizzle:
@@ -107,7 +107,7 @@ class WeatherViewController: UIViewController {
                 case .fog:
                     return WeatherAppDS.Colors.fogBackground
                 case .clearSky, .fewClouds, .rain:
-                    if viewModel.isDay() {
+                if item.isDay {
                         return WeatherAppDS.Colors.clearDayBackground
                     } else {
                         return WeatherAppDS.Colors.clearNightBackground
@@ -120,42 +120,23 @@ class WeatherViewController: UIViewController {
         view.backgroundColor = backgroundColor
     }
 
-    func updatePromptTextMessage(for condition: Condition) {
+//    func updateBackgroundColor(for item: WeatherViewItem) {
+////        let color: WeatherAppDS.Colors = item.backgroundColor
+//        view.backgroundColor = WeatherAppDS.Colors()
+//    }
 
-        var promptTextMessage: String {
-            switch condition {
-            case .thunderstorm:
-                return "stay safe!"
-            case .drizzle:
-                return "it's just a drizzle!"
-            case .rain:
-                return "you better have an umbrella!"
-            case .snow:
-                return "don't forget your coat!"
-            case .fog:
-                return "don't worry this fog will pass!"
-            case .clearSky:
-                if viewModel.isDay() {
-                    return "have a bright day!"
-                } else {
-                    return "nighty night!"
-                }
-            case .fewClouds, .clouds:
-                return "don't worry this cloud will pass!"
-            }
-        }
-
-        promptTextLabel.text = promptTextMessage
+    func updatePromptTextMessage(for item: WeatherViewItem) {
+        promptTextLabel.text = item.promptMessage
     }
 
-    func updateDarkOrLightMode(for condition: Condition) {
+    func updateDarkOrLightMode(for item: WeatherViewItem) {
 
         var darkOrLightMode: UIUserInterfaceStyle {
-            switch condition {
+            switch item.weatherCondition {
             case .thunderstorm, .snow, .drizzle, .fog, .clouds:
                 return .light
             case .clearSky, .fewClouds, .rain:
-                if viewModel.isDay() {
+                if item.isDay {
                     return .light
                 } else {
                     return .dark
@@ -253,23 +234,26 @@ extension WeatherViewController: UITextFieldDelegate {
 //MARK: - WeatherViewModelDelegate
 
 extension WeatherViewController: WeatherViewModelDelegate {
-
+    
     func didUpdate(with state: ViewState) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-
+            
             switch state {
             case .none:
                 break
             case .loading:
                 self.startLoading()
-            case .success(_):
-                let weatherCondition = self.viewModel.getWeatherCondition()
+            case .success:
                 self.stopLoading()
-                self.updateLabels()
-                self.updateBackgroundColor(for: weatherCondition)
-                self.updatePromptTextMessage(for: weatherCondition)
-                self.updateDarkOrLightMode(for: weatherCondition)
+                guard let item = self.viewModel.getViewItem() else {
+                    self.presentAlert(title: "Not able to fetch the data", message: "", vc: self)
+                    return
+                }
+                self.updateLabels(for: item)
+                self.updateBackgroundColor(for: item)
+                self.updatePromptTextMessage(for: item)
+                self.updateDarkOrLightMode(for: item)
             case .error(let error):
                 self.presentAlert(title: error.title, message: error.message, vc: self)
                 self.stopLoading()

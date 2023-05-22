@@ -8,10 +8,6 @@
 import Foundation
 
 struct WeatherModelAdapter {
-    enum Condition {
-        case clearSky, fewClouds, thunderstorm, drizzle, rain, snow, fog, clouds
-    }
-
     let data: WeatherData!
 
     init(data: WeatherData) {
@@ -20,17 +16,17 @@ struct WeatherModelAdapter {
 
     func getConvertedData() -> WeatherModel? {
 
-        guard let currentTime: String = convert(
+        guard let currentTime: String = convertTimeToAmPmFormat(
             from: data.currentTime,
             timeZoneInMilliseconds: data.timezone)
         else { return nil }
 
-        guard let sunriseTime: String = convert(
+        guard let sunriseTime: String = convertTimeToAmPmFormat(
             from: data.locationData.sunrise,
             timeZoneInMilliseconds: data.timezone)
         else { return nil }
 
-        guard let sunsetTime: String = convert(
+        guard let sunsetTime: String = convertTimeToAmPmFormat(
             from: data.locationData.sunset,
             timeZoneInMilliseconds: data.timezone)
         else { return nil }
@@ -64,7 +60,7 @@ struct WeatherModelAdapter {
         return range.contains(current)
     }
 
-    private func convert(from timeInMilliseconds: Int, timeZoneInMilliseconds: Int) -> String? {
+    private func convertTimeToAmPmFormat(from timeInMilliseconds: Int, timeZoneInMilliseconds: Int) -> String? {
 
         guard let timeZone = TimeZone(secondsFromGMT: timeZoneInMilliseconds) else {
             return nil
@@ -74,7 +70,7 @@ struct WeatherModelAdapter {
 
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone
-        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.dateFormat = "h:mm a"
 
         return dateFormatter.string(from: date)
     }
@@ -88,7 +84,7 @@ struct WeatherModelAdapter {
         let date = Date(timeIntervalSince1970: Double(timeInMilliseconds))
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone
-        dateFormatter.dateFormat = "EEEE, MMM d"
+        dateFormatter.dateStyle = .medium
         let dateString = dateFormatter.string(from: date)
 
         return dateString

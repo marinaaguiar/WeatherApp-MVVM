@@ -11,7 +11,7 @@ import CoreLocation
 enum ViewState {
     case none
     case loading
-    case success(WeatherModel)
+    case success
     case error(WeatherErrorModel)
 }
 
@@ -44,8 +44,8 @@ final class WeatherViewModel: WeatherViewModelProtocol {
                     let weatherModel = WeatherModelAdapter(data: data)
 
                     guard let convertedWeatherModel = weatherModel.getConvertedData() else { return }
-                    self.state = .success(convertedWeatherModel)
                     self.weatherModel = convertedWeatherModel
+                    self.state = .success
                 case .failure(let error):
                     self.state = .error(WeatherErrorModel(error: error))
                 }
@@ -67,8 +67,8 @@ final class WeatherViewModel: WeatherViewModelProtocol {
 
                     guard let convertedWeatherModel = weatherModel.getConvertedData() else { return }
 
-                    self.state = .success(convertedWeatherModel)
                     self.weatherModel = convertedWeatherModel
+                    self.state = .success
 
                 case .failure(let error):
                     self.state = .error(WeatherErrorModel(error: error))
@@ -76,12 +76,73 @@ final class WeatherViewModel: WeatherViewModelProtocol {
             }
         }
 
+    func getViewItem() -> WeatherViewItem? {
+        guard let weatherModel = weatherModel else { return nil }
+        let weatherViewItem = WeatherViewItem(
+            temperature: weatherModel.temperature,
+            location: getLocationLabel(),
+            timeAmPmFormat: weatherModel.currentTime,
+            currentDate: weatherModel.currentDate,
+            conditionDescription: weatherModel.conditionDescription,
+            conditionImageName: getWeatherConditionImageName() ?? "",
+            weatherCondition: weatherModel.condition,
+            isDay: weatherModel.isDay,
+            promptMessage: getPromptMessage()
+//            backgroundColor: getBackgroundColorCondition()
+        )
 
-    func getTemperature() -> String {
-        return weatherModel?.temperature ?? ""
+        return weatherViewItem
     }
 
-    func getLocationLabel() -> String {
+    private func getPromptMessage() -> String {
+        guard let weatherModel = weatherModel else { return "" }
+        switch weatherModel.condition {
+        case .thunderstorm:
+            return "stay safe!"
+        case .drizzle:
+            return "it's just a drizzle!"
+        case .rain:
+            return "you better have an umbrella!"
+        case .snow:
+            return "don't forget your coat!"
+        case .fog:
+            return "don't worry this fog will pass!"
+        case .clearSky:
+            if weatherModel.isDay {
+                return "have a bright day!"
+            } else {
+                return "nighty night!"
+            }
+        case .fewClouds, .clouds:
+            return "don't worry this cloud will pass!"
+        }
+    }
+
+//    private func getBackgroundColorCondition() -> BackgroundColorCondition {
+//        guard let weatherModel = weatherModel else { return .backgroundColor }
+//
+//        switch weatherModel.condition {
+//            case .thunderstorm:
+//                return .thunderstormBackground
+//            case .drizzle:
+//                return .drizzleBackground
+//            case .snow:
+//                return .snowBackground
+//            case .fog:
+//                return .fogBackground
+//            case .clearSky, .fewClouds, .rain:
+//            if weatherModel.isDay {
+//                    return .clearDayBackground
+//                } else {
+//                    return .clearNightBackground
+//                }
+//            case .clouds:
+//                return .cloudBackground
+//        }
+//
+//    }
+
+    private func getLocationLabel() -> String {
         guard
             let cityName = weatherModel?.cityName,
             let countryName = weatherModel?.countryName
@@ -89,19 +150,8 @@ final class WeatherViewModel: WeatherViewModelProtocol {
         return "\(cityName), \(countryName)"
     }
 
-    func getCurrentTimeAmPmFormat() -> String {
-        return weatherModel?.currentTimeAmPm ?? ""
-    }
-
-    func getCurrentDate() -> String {
-        return weatherModel?.currentDate ?? ""
-    }
-
-    func getConditionDescription() -> String {
-        return weatherModel?.conditionDescription ?? ""
-    }
-
-    func getWeatherConditionImageName() -> String {
+    private func getWeatherConditionImageName() -> String? {
+        guard let weatherModel = weatherModel else { return nil }
 
         if weatherModel.isDay {
             return "\(weatherModel.condition)" + ".day"
@@ -109,13 +159,4 @@ final class WeatherViewModel: WeatherViewModelProtocol {
             return "\(weatherModel.condition)" + ".night"
         }
     }
-
-    func getWeatherCondition() -> Condition {
-        return weatherModel?.condition ?? .clearSky
-    }
-
-    func isDay() -> Bool {
-        return weatherModel?.isDay ?? true
-    }
-
 }
