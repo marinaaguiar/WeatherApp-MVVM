@@ -12,13 +12,13 @@ enum ViewState {
     case none
     case loading
     case success(WeatherModel)
-    case error(Error)
+    case error(WeatherErrorModel)
 }
 
 final class WeatherViewModel: WeatherViewModelProtocol {
 
     weak var delegate: WeatherViewModelDelegate?
-    private var weatherModel: WeatherModel!
+    private var weatherModel: WeatherModel?
 
     let apiService = APIService()
 
@@ -47,7 +47,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
                     self.state = .success(convertedWeatherModel)
                     self.weatherModel = convertedWeatherModel
                 case .failure(let error):
-                    self.state = .error(error)
+                    self.state = .error(WeatherErrorModel(error: error))
                 }
             }
         }
@@ -71,10 +71,11 @@ final class WeatherViewModel: WeatherViewModelProtocol {
                     self.weatherModel = convertedWeatherModel
 
                 case .failure(let error):
-                    self.state = .error(error)
+                    self.state = .error(WeatherErrorModel(error: error))
                 }
             }
         }
+
 
     func getTemperature() -> String {
         return weatherModel?.temperature ?? ""

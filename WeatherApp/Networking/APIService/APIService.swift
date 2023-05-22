@@ -69,15 +69,10 @@ private struct EndPoint {
 
 class APIService {
 
-    enum APIError: Error {
-        case failedToConstructURL
-        case failedToEncoding
-    }
-
     func getWeather(
         cityName: String,
         countryName: String,
-        completion: @escaping ((Result<WeatherData, Error>) -> Void)
+        completion: @escaping ((Result<WeatherData, APIError>) -> Void)
     ) {
 
         guard let url = EndPoint.weatherURL(
@@ -90,13 +85,13 @@ class APIService {
         }
         print("Debug print: \(url)")
 
-        NetworkingService().fetchGenericData(url: url, completion: completion)
+        apiGet(url: url, completion: completion)
     }
 
     func getWeather(
         latitude: CLLocationDegrees,
         longitude: CLLocationDegrees,
-        completion: @escaping ((Result<WeatherData, Error>) -> Void)
+        completion: @escaping ((Result<WeatherData, APIError>) -> Void)
     ) {
 
         guard let url = EndPoint.weatherURL(
@@ -108,6 +103,17 @@ class APIService {
         }
         print("Debug print: \(url)")
 
-        NetworkingService().fetchGenericData(url: url, completion: completion)
+        apiGet(url: url, completion: completion)
+    }
+
+    private func apiGet(url: URL, completion: @escaping (Result<WeatherData, APIError>) -> Void) {
+        NetworkingService().fetchGenericData(url: url) { (result: Result<WeatherData, Error>) in
+            switch result {
+            case let .success(data):
+                completion(.success(data))
+            case let .failure(error):
+                completion(.failure(APIError.networkingError(error)))
+            }
+        }
     }
 }

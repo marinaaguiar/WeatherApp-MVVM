@@ -270,11 +270,9 @@ extension WeatherViewController: WeatherViewModelDelegate {
                 self.updateBackgroundColor(for: weatherCondition)
                 self.updatePromptTextMessage(for: weatherCondition)
                 self.updateDarkOrLightMode(for: weatherCondition)
-            case .error(let error as APIError):
+            case .error(let error):
                 self.presentAlert(title: error.title, message: error.message, vc: self)
                 self.stopLoading()
-            case .error(_):
-                self.presentAlert(title: "Unexpected Error", message: "", vc: self)
             }
         }
     }
