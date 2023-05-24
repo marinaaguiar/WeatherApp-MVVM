@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-private struct EndPoint {
+struct APIEndpoint {
 
     enum QueryItemKey: String {
         case cityName = "q"
@@ -27,6 +27,7 @@ private struct EndPoint {
             URLQueryItem(name: "appid", value: APIConstant.apiKey),
             URLQueryItem(name: "units", value: "metric"),
         ]
+
         return components
     }
 
@@ -75,7 +76,7 @@ class APIService {
         completion: @escaping ((Result<WeatherData, APIError>) -> Void)
     ) {
 
-        guard let url = EndPoint.weatherURL(
+        guard let url = APIEndpoint.weatherURL(
             cityName: cityName,
             countryName: countryName
         )
@@ -94,7 +95,7 @@ class APIService {
         completion: @escaping ((Result<WeatherData, APIError>) -> Void)
     ) {
 
-        guard let url = EndPoint.weatherURL(
+        guard let url = APIEndpoint.weatherURL(
             latitude: latitude,
             longitude: longitude)
         else {
