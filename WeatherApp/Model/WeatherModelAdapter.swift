@@ -70,7 +70,7 @@ struct WeatherModelAdapter {
 
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone
-        dateFormatter.dateFormat = "h:mm a"
+        dateFormatter.timeStyle = .short
 
         return dateFormatter.string(from: date)
     }
@@ -84,7 +84,7 @@ struct WeatherModelAdapter {
         let date = Date(timeIntervalSince1970: Double(timeInMilliseconds))
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone
-        dateFormatter.dateStyle = .medium
+        dateFormatter.dateFormat = "EEEE, MMM d"
         let dateString = dateFormatter.string(from: date)
 
         return dateString
