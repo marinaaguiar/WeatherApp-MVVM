@@ -95,55 +95,15 @@ class WeatherViewController: UIViewController {
     }
 
     func updateBackgroundColor(for item: WeatherViewItem) {
-
-        var backgroundColor: UIColor {
-            switch item.weatherCondition {
-                case .thunderstorm:
-                    return WeatherAppDS.Colors.thunderstormBackground
-                case .drizzle:
-                    return WeatherAppDS.Colors.drizzleBackground
-                case .snow:
-                    return WeatherAppDS.Colors.snowBackground
-                case .fog:
-                    return WeatherAppDS.Colors.fogBackground
-                case .clearSky, .fewClouds, .rain:
-                if item.isDay {
-                        return WeatherAppDS.Colors.clearDayBackground
-                    } else {
-                        return WeatherAppDS.Colors.clearNightBackground
-                    }
-                case .clouds:
-                    return WeatherAppDS.Colors.cloudBackground
-            }
-        }
-
-        view.backgroundColor = backgroundColor
+        view.backgroundColor = item.backgroundColor
     }
-
-//    func updateBackgroundColor(for item: WeatherViewItem) {
-////        let color: WeatherAppDS.Colors = item.backgroundColor
-//        view.backgroundColor = WeatherAppDS.Colors()
-//    }
 
     func updatePromptTextMessage(for item: WeatherViewItem) {
         promptTextLabel.text = item.promptMessage
     }
 
     func updateDarkOrLightMode(for item: WeatherViewItem) {
-
-        var darkOrLightMode: UIUserInterfaceStyle {
-            switch item.weatherCondition {
-            case .thunderstorm, .snow, .drizzle, .fog, .clouds:
-                return .light
-            case .clearSky, .fewClouds, .rain:
-                if item.isDay {
-                    return .light
-                } else {
-                    return .dark
-                }
-            }
-        }
-        overrideUserInterfaceStyle = darkOrLightMode
+        overrideUserInterfaceStyle = item.darkOrLightMode
     }
 }
 

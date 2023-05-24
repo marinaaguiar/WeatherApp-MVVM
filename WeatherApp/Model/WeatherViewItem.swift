@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct WeatherViewItem {
 
@@ -18,16 +19,38 @@ struct WeatherViewItem {
     let weatherCondition: Condition
     let isDay: Bool
     let promptMessage: String
-//    let backgroundColor: BackgroundColorCondition
-}
 
-enum BackgroundColorCondition: CaseIterable {
-    case backgroundColor
-    case thunderstormBackground
-    case drizzleBackground
-    case snowBackground
-    case fogBackground
-    case clearDayBackground
-    case clearNightBackground
-    case cloudBackground
+    var backgroundColor: UIColor {
+        switch weatherCondition {
+        case .thunderstorm:
+            return WeatherAppDS.Colors.thunderstormBackground
+        case .drizzle:
+            return WeatherAppDS.Colors.drizzleBackground
+        case .snow:
+            return WeatherAppDS.Colors.snowBackground
+        case .fog:
+            return WeatherAppDS.Colors.fogBackground
+        case .clearSky, .fewClouds, .rain:
+            if isDay {
+                    return WeatherAppDS.Colors.clearDayBackground
+                } else {
+                    return WeatherAppDS.Colors.clearNightBackground
+                }
+            case .clouds:
+                return WeatherAppDS.Colors.cloudBackground
+        }
+    }
+
+    var darkOrLightMode: UIUserInterfaceStyle {
+        switch weatherCondition {
+        case .thunderstorm, .snow, .drizzle, .fog, .clouds:
+            return .light
+        case .clearSky, .fewClouds, .rain:
+            if isDay {
+                return .light
+            } else {
+                return .dark
+            }
+        }
+    }
 }

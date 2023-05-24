@@ -88,7 +88,6 @@ final class WeatherViewModel: WeatherViewModelProtocol {
             weatherCondition: weatherModel.condition,
             isDay: weatherModel.isDay,
             promptMessage: getPromptMessage()
-//            backgroundColor: getBackgroundColorCondition()
         )
 
         return weatherViewItem
