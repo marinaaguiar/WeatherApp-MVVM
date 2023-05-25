@@ -31,7 +31,11 @@ final class APIServiceTests: XCTestCase {
 
                 switch result {
                 case .success(let data):
+                    print("Fetch Data Test passed: \(data)")
                     XCTAssertNotNil(data)
+                    XCTAssertEqual(data.timezone, weatherData.timezone)
+                    XCTAssertEqual(data.cityName, weatherData.cityName)
+                    XCTAssertEqual(data.locationData.country, weatherData.locationData.country)
                     expectation.fulfill()
 
                 case .failure(let error):
