@@ -29,6 +29,7 @@
 		9C93A6A42A03EC28000B7BCF /* WeatherModelAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93A6A32A03EC28000B7BCF /* WeatherModelAdapter.swift */; };
 		9CB4B0F026BB00C000833CF6 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4B0EF26BB00C000833CF6 /* WeatherModel.swift */; };
 		9CD3691B2A1E1BCC0054A4BC /* APIEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD3691A2A1E1BCC0054A4BC /* APIEndpointTests.swift */; };
+		9CD369432A251ECF0054A4BC /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD369422A251ECF0054A4BC /* APIEndpoint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		9C93A6A32A03EC28000B7BCF /* WeatherModelAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModelAdapter.swift; sourceTree = "<group>"; };
 		9CB4B0EF26BB00C000833CF6 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		9CD3691A2A1E1BCC0054A4BC /* APIEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpointTests.swift; sourceTree = "<group>"; };
+		9CD369422A251ECF0054A4BC /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +199,7 @@
 				9C79AEE72A138A96003727EC /* APIError.swift */,
 				9C93A6832A002DF0000B7BCF /* APIConstant.swift */,
 				9C93A6A12A03BADC000B7BCF /* APIService.swift */,
+				9CD369422A251ECF0054A4BC /* APIEndpoint.swift */,
 			);
 			path = APIService;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				9C93A6A02A03BA6C000B7BCF /* NetworkingService.swift in Sources */,
 				9C0FFE1A26B0765F0017F597 /* AppDelegate.swift in Sources */,
 				9C79AF122A1BAC18003727EC /* WeatherViewItem.swift in Sources */,
+				9CD369432A251ECF0054A4BC /* APIEndpoint.swift in Sources */,
 				9C7B331429FA7AC300F5700E /* Colors.swift in Sources */,
 				9C93A6A42A03EC28000B7BCF /* WeatherModelAdapter.swift in Sources */,
 				9C93A6A22A03BADC000B7BCF /* APIService.swift in Sources */,

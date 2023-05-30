@@ -20,7 +20,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
     weak var delegate: WeatherViewModelDelegate?
     private var weatherModel: WeatherModel?
 
-    let apiService = APIService()
+    let apiService = APIService(service: NetworkingService())
 
     private var state: ViewState {
         didSet {
