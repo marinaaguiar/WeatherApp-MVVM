@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum APIError: Error {
+enum APIError: Error, Equatable {
 
     case unknown
     case noInternetConnection
     case failedRequest
     case invalidResponse
     case failedToConstructURL
-    case networkingError(Error)
+    case networkingError
 }
