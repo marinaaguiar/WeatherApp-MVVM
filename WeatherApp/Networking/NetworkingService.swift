@@ -7,7 +7,12 @@
 
 import Foundation
 
-class NetworkingService {
+protocol NetworkingServiceProtocol {
+
+  func fetchGenericData<T: Decodable>(url: URL, completion: @escaping(Result<T, Error>) -> Void)
+}
+
+final class NetworkingService: NetworkingServiceProtocol {
 
     private var sharedSession: URLSession { URLSession.shared }
 
