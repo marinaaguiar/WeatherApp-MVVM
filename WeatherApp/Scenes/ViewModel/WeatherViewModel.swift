@@ -117,30 +117,6 @@ final class WeatherViewModel: WeatherViewModelProtocol {
         }
     }
 
-//    private func getBackgroundColorCondition() -> BackgroundColorCondition {
-//        guard let weatherModel = weatherModel else { return .backgroundColor }
-//
-//        switch weatherModel.condition {
-//            case .thunderstorm:
-//                return .thunderstormBackground
-//            case .drizzle:
-//                return .drizzleBackground
-//            case .snow:
-//                return .snowBackground
-//            case .fog:
-//                return .fogBackground
-//            case .clearSky, .fewClouds, .rain:
-//            if weatherModel.isDay {
-//                    return .clearDayBackground
-//                } else {
-//                    return .clearNightBackground
-//                }
-//            case .clouds:
-//                return .cloudBackground
-//        }
-//
-//    }
-
     private func getLocationLabel() -> String {
         guard
             let cityName = weatherModel?.cityName,
